@@ -1,0 +1,310 @@
+[gd_scene format=3 uid="uid://cq3h7670fj75e"]
+
+[ext_resource type="Texture2D" uid="uid://bt81oftcgq43m" path="res://Sprites/Ground/Ground.png" id="1_muem4"]
+[ext_resource type="Texture2D" uid="uid://bl0rewnea0rq2" path="res://Sprites/Crusher/idle/frame0000.png" id="4_gqmmt"]
+[ext_resource type="Script" uid="uid://cm2wakxntlu4c" path="res://Scripts/player.gd" id="5_yc10j"]
+[ext_resource type="PackedScene" uid="uid://cc2vmg67iwa8l" path="res://Scenes/projectile_template.tscn" id="6_jscy8"]
+[ext_resource type="Texture2D" uid="uid://b0ckofspdaae1" path="res://Sprites/PlayerBot/run4.png" id="7_pm3ni"]
+[ext_resource type="Texture2D" uid="uid://darg15puv7tuf" path="res://Sprites/PlayerBot/idle.png" id="8_y6deb"]
+[ext_resource type="Texture2D" uid="uid://g2symrfos05k" path="res://Sprites/PlayerBot/run1.png" id="9_og1vs"]
+[ext_resource type="Texture2D" uid="uid://bh3qbvm0nfoei" path="res://Sprites/PlayerBot/run2.png" id="10_2wyq8"]
+[ext_resource type="PackedScene" uid="uid://8xe88uer26op" path="res://Scenes/explosion.tscn" id="10_h1bgf"]
+[ext_resource type="Script" uid="uid://ctwptrd4ykfu5" path="res://Scripts/crusher_2.gd" id="10_k12tt"]
+[ext_resource type="PhysicsMaterial" uid="uid://cwtkt8w8iiogj" path="res://Crusher2Material.tres" id="11_b3802"]
+[ext_resource type="Texture2D" uid="uid://76k27df3mmtp" path="res://Sprites/PlayerBot/run3.png" id="11_vxglm"]
+[ext_resource type="Texture2D" uid="uid://6h8w2fnlqim0" path="res://Sprites/Crosshair/Crosshair.png" id="12_2f3dj"]
+[ext_resource type="Script" uid="uid://cmkbdxq8feltf" path="res://Scripts/crosshair.gd" id="13_yq6so"]
+[ext_resource type="Script" uid="uid://p3qmfyxwlciq" path="res://Scripts/ui_manager.gd" id="14_fv21b"]
+[ext_resource type="Texture2D" uid="uid://ibaobsfrtqt6" path="res://Sprites/HealthBar/Pixel1_Healthbar_0002_pixel1_border.png" id="15_tel4y"]
+[ext_resource type="Texture2D" uid="uid://srgejymo3fit" path="res://Sprites/HealthBar/Pixel1_Healthbar_0001_pixel1_healthbar.png" id="16_qkpxi"]
+
+[sub_resource type="Environment" id="Environment_gyfs4"]
+background_mode = 1
+background_color = Color(1.07813e-05, 0.604744, 0.799717, 1)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2c62f"]
+size = Vector2(1280, 48)
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_gyfs4"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_t8h3l"]
+radius = 60.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_nrax6"]
+radius = 60.0
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_8mm7a"]
+radius = 13.3333
+height = 47.3333
+
+[sub_resource type="Animation" id="Animation_7ycvg"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("7_pm3ni")]
+}
+
+[sub_resource type="Animation" id="Animation_wr18j"]
+resource_name = "idle"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("8_y6deb")]
+}
+
+[sub_resource type="Animation" id="Animation_qwutr"]
+resource_name = "run"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.266667, 0.5, 0.766667, 1),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("9_og1vs"), ExtResource("10_2wyq8"), ExtResource("11_vxglm"), ExtResource("7_pm3ni"), ExtResource("9_og1vs")]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_mo76n"]
+_data = {
+&"RESET": SubResource("Animation_7ycvg"),
+&"idle": SubResource("Animation_wr18j"),
+&"run": SubResource("Animation_qwutr")
+}
+
+[node name="Main" type="Node2D" unique_id=209672806]
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1301283682]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1771195588]
+environment = SubResource("Environment_gyfs4")
+
+[node name="UIManager" type="Node2D" parent="." unique_id=1058461264]
+script = ExtResource("14_fv21b")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="UIManager" unique_id=1417162848]
+
+[node name="Crusher1Healthbar" type="TextureProgressBar" parent="UIManager/CanvasLayer" unique_id=278605129]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -180.0
+offset_top = 27.0
+offset_right = -50.0
+offset_bottom = 116.0
+grow_horizontal = 0
+value = 100.0
+stretch_margin_left = 16
+stretch_margin_top = 16
+texture_under = ExtResource("15_tel4y")
+texture_progress = ExtResource("16_qkpxi")
+texture_progress_offset = Vector2(3, 1)
+
+[node name="Crusher1Icon" type="TextureRect" parent="UIManager/CanvasLayer/Crusher1Healthbar" unique_id=1936513929]
+layout_mode = 0
+offset_left = 95.0
+offset_top = -9.0
+offset_right = 146.0
+offset_bottom = 42.0
+texture = ExtResource("4_gqmmt")
+
+[node name="Crusher2Healthbar" type="TextureProgressBar" parent="UIManager/CanvasLayer" unique_id=960112032]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -180.0
+offset_top = 90.0
+offset_right = -50.0
+offset_bottom = 179.0
+grow_horizontal = 0
+value = 100.0
+stretch_margin_left = 16
+stretch_margin_top = 16
+texture_under = ExtResource("15_tel4y")
+texture_progress = ExtResource("16_qkpxi")
+texture_progress_offset = Vector2(3, 1)
+
+[node name="Crusher2Icon" type="TextureRect" parent="UIManager/CanvasLayer/Crusher2Healthbar" unique_id=1454341797]
+layout_mode = 0
+offset_left = 95.0
+offset_top = -9.0
+offset_right = 146.0
+offset_bottom = 42.0
+texture = ExtResource("4_gqmmt")
+
+[node name="PlayerHealthbar" type="TextureProgressBar" parent="UIManager/CanvasLayer" unique_id=1631542514]
+offset_left = 59.0
+offset_top = 26.0
+offset_right = 189.0
+offset_bottom = 115.0
+value = 100.0
+stretch_margin_left = 16
+stretch_margin_top = 16
+texture_under = ExtResource("15_tel4y")
+texture_progress = ExtResource("16_qkpxi")
+texture_progress_offset = Vector2(3, 1)
+
+[node name="PlayerIcon" type="TextureRect" parent="UIManager/CanvasLayer/PlayerHealthbar" unique_id=395495552]
+layout_mode = 0
+offset_left = -51.0
+offset_top = -9.0
+offset_right = -11.0
+offset_bottom = 31.0
+texture = ExtResource("8_y6deb")
+
+[node name="LoseUI" type="Button" parent="UIManager/CanvasLayer" unique_id=929411824]
+visible = false
+offset_left = 573.0
+offset_top = 279.0
+offset_right = 655.0
+offset_bottom = 333.0
+text = "You Lose!
+Try Again"
+
+[node name="WinUI" type="Button" parent="UIManager/CanvasLayer" unique_id=540157624]
+visible = false
+offset_left = 573.0
+offset_top = 279.0
+offset_right = 655.0
+offset_bottom = 333.0
+text = "You Win!
+Replay?"
+
+[node name="FlawlessUI" type="Button" parent="UIManager/CanvasLayer" unique_id=1866136873]
+visible = false
+offset_left = 573.0
+offset_top = 279.0
+offset_right = 655.0
+offset_bottom = 333.0
+text = "Flawless Victory!
+Restart?"
+
+[node name="Crosshair" type="Sprite2D" parent="." unique_id=123811115]
+top_level = true
+texture = ExtResource("12_2f3dj")
+script = ExtResource("13_yq6so")
+
+[node name="Ground" type="StaticBody2D" parent="." unique_id=1170246153]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Ground" unique_id=376730370]
+position = Vector2(0, 336)
+shape = SubResource("RectangleShape2D_2c62f")
+
+[node name="Sprite2D" type="Sprite2D" parent="Ground/CollisionShape2D" unique_id=1651840538]
+texture_repeat = 2
+position = Vector2(0, -1)
+scale = Vector2(2, 2)
+texture = ExtResource("1_muem4")
+region_enabled = true
+region_rect = Rect2(0, 0, 640, 24)
+
+[node name="Borders" type="StaticBody2D" parent="." unique_id=902983620]
+disable_mode = 1
+
+[node name="TopCollisionShape2D" type="CollisionShape2D" parent="Borders" unique_id=426167893]
+position = Vector2(0, -360)
+rotation = 3.14159
+shape = SubResource("WorldBoundaryShape2D_gyfs4")
+
+[node name="LeftCollisionShape2D" type="CollisionShape2D" parent="Borders" unique_id=1132995041]
+position = Vector2(-640, 0)
+rotation = 1.5708
+shape = SubResource("WorldBoundaryShape2D_gyfs4")
+
+[node name="RightCollisionShape2D" type="CollisionShape2D" parent="Borders" unique_id=1093780007]
+position = Vector2(640, 0)
+rotation = -1.5708
+shape = SubResource("WorldBoundaryShape2D_gyfs4")
+
+[node name="Crusher1" type="RigidBody2D" parent="." unique_id=662249364 groups=["crusher"]]
+position = Vector2(-162, 234)
+collision_layer = 8
+mass = 0.5
+physics_material_override = ExtResource("11_b3802")
+can_sleep = false
+lock_rotation = true
+freeze_mode = 1
+continuous_cd = 2
+contact_monitor = true
+max_contacts_reported = 2
+linear_damp_mode = 1
+angular_damp = -1.0
+script = ExtResource("10_k12tt")
+explosion = ExtResource("10_h1bgf")
+
+[node name="Sprite" type="Sprite2D" parent="Crusher1" unique_id=1148788484 groups=["crusher"]]
+scale = Vector2(2.5, 2.5)
+texture = ExtResource("4_gqmmt")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Crusher1" unique_id=1701641709]
+position = Vector2(-1, -2)
+shape = SubResource("CircleShape2D_t8h3l")
+
+[node name="Crusher2" type="RigidBody2D" parent="." unique_id=466093581 groups=["crusher"]]
+position = Vector2(276, 70)
+collision_layer = 8
+mass = 0.5
+physics_material_override = ExtResource("11_b3802")
+can_sleep = false
+lock_rotation = true
+continuous_cd = 2
+contact_monitor = true
+max_contacts_reported = 2
+linear_damp_mode = 1
+angular_damp = -1.0
+script = ExtResource("10_k12tt")
+explosion = ExtResource("10_h1bgf")
+
+[node name="Sprite" type="Sprite2D" parent="Crusher2" unique_id=2030249320 groups=["crusher"]]
+scale = Vector2(2.5, 2.5)
+texture = ExtResource("4_gqmmt")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Crusher2" unique_id=1855106026]
+shape = SubResource("CircleShape2D_nrax6")
+
+[node name="Player" type="CharacterBody2D" parent="." unique_id=1729633913 groups=["player"]]
+position = Vector2(-498, 197)
+scale = Vector2(1.5, 1.5)
+collision_mask = 9
+script = ExtResource("5_yc10j")
+projectile = ExtResource("6_jscy8")
+shoot_time = 0.25
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player" unique_id=1311935968 groups=["player"]]
+position = Vector2(2, 11)
+shape = SubResource("CapsuleShape2D_8mm7a")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Player" unique_id=1935533945 groups=["player"]]
+root_node = NodePath("../CollisionShape2D")
+libraries/ = SubResource("AnimationLibrary_mo76n")
+
+[node name="Sprite2D" type="Sprite2D" parent="Player" unique_id=1554116121 groups=["player"]]
+position = Vector2(4, 6)
+scale = Vector2(2, 2)
+texture = ExtResource("7_pm3ni")
+
+[connection signal="pressed" from="UIManager/CanvasLayer/LoseUI" to="UIManager" method="_on_lose_ui_pressed"]
+[connection signal="pressed" from="UIManager/CanvasLayer/WinUI" to="UIManager" method="_on_win_ui_pressed"]
+[connection signal="pressed" from="UIManager/CanvasLayer/FlawlessUI" to="UIManager" method="_on_win_ui_pressed"]
+[connection signal="body_entered" from="Crusher1" to="Crusher1" method="_on_body_entered"]
+[connection signal="body_exited" from="Crusher1" to="Crusher1" method="_on_body_exited"]
+[connection signal="body_entered" from="Crusher2" to="Crusher2" method="_on_body_entered"]
+[connection signal="body_exited" from="Crusher2" to="Crusher2" method="_on_body_exited"]

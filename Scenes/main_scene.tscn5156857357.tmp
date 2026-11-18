@@ -1,0 +1,308 @@
+[gd_scene load_steps=28 format=3 uid="uid://cq3h7670fj75e"]
+
+[ext_resource type="Texture2D" uid="uid://bt81oftcgq43m" path="res://Sprites/Ground/Ground.png" id="1_0f027"]
+[ext_resource type="Texture2D" uid="uid://bl0rewnea0rq2" path="res://Sprites/Crusher/idle/frame0000.png" id="1_2c62f"]
+[ext_resource type="Script" uid="uid://06gtlavjyl8b" path="res://Scripts/crusher_1.gd" id="2_671wp"]
+[ext_resource type="Script" uid="uid://cm2wakxntlu4c" path="res://Scripts/player.gd" id="3_d5x1h"]
+[ext_resource type="PackedScene" uid="uid://8xe88uer26op" path="res://Scenes/explosion.tscn" id="3_m35m6"]
+[ext_resource type="Texture2D" uid="uid://g2symrfos05k" path="res://Sprites/PlayerBot/run1.png" id="4_nfk4m"]
+[ext_resource type="PackedScene" uid="uid://cc2vmg67iwa8l" path="res://Scenes/bullet_template.tscn" id="4_qwutr"]
+[ext_resource type="Texture2D" uid="uid://bh3qbvm0nfoei" path="res://Sprites/PlayerBot/run2.png" id="5_66tet"]
+[ext_resource type="Texture2D" uid="uid://76k27df3mmtp" path="res://Sprites/PlayerBot/run3.png" id="6_7ycvg"]
+[ext_resource type="Texture2D" uid="uid://b0ckofspdaae1" path="res://Sprites/PlayerBot/run4.png" id="7_wr18j"]
+[ext_resource type="Texture2D" uid="uid://darg15puv7tuf" path="res://Sprites/PlayerBot/idle.png" id="8_66tet"]
+[ext_resource type="Texture2D" uid="uid://6h8w2fnlqim0" path="res://Sprites/Crosshair/Crosshair.png" id="9_wr18j"]
+[ext_resource type="Script" uid="uid://cmkbdxq8feltf" path="res://Scripts/crosshair.gd" id="10_qwutr"]
+[ext_resource type="Script" uid="uid://p3qmfyxwlciq" path="res://Scripts/ui_manager.gd" id="13_mo76n"]
+[ext_resource type="Texture2D" uid="uid://ibaobsfrtqt6" path="res://Sprites/HealthBar/Pixel1_Healthbar_0002_pixel1_border.png" id="14_2jcla"]
+[ext_resource type="Texture2D" uid="uid://srgejymo3fit" path="res://Sprites/HealthBar/Pixel1_Healthbar_0001_pixel1_healthbar.png" id="15_m35m6"]
+[ext_resource type="Script" uid="uid://cdcd4oywf6wxl" path="res://Scripts/crusher_2.gd" id="17_u0ygc"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2c62f"]
+size = Vector2(1152, 43.5)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_qwutr"]
+radius = 59.0085
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_8mm7a"]
+radius = 16.6667
+height = 54.0
+
+[sub_resource type="Animation" id="Animation_7ycvg"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("7_wr18j")]
+}
+
+[sub_resource type="Animation" id="Animation_wr18j"]
+resource_name = "idle"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("8_66tet")]
+}
+
+[sub_resource type="Animation" id="Animation_qwutr"]
+resource_name = "run"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.266667, 0.5, 0.766667, 1),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("4_nfk4m"), ExtResource("5_66tet"), ExtResource("6_7ycvg"), ExtResource("7_wr18j"), ExtResource("4_nfk4m")]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_mo76n"]
+_data = {
+&"RESET": SubResource("Animation_7ycvg"),
+&"idle": SubResource("Animation_wr18j"),
+&"run": SubResource("Animation_qwutr")
+}
+
+[sub_resource type="Environment" id="Environment_gyfs4"]
+background_mode = 1
+background_color = Color(1.07813e-05, 0.604744, 0.799717, 1)
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_gyfs4"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_u0ygc"]
+friction = 0.0
+bounce = 1.0
+
+[node name="mainScene" type="Node2D"]
+
+[node name="Camera2D" type="Camera2D" parent="."]
+
+[node name="ground" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ground"]
+position = Vector2(0, 302.25)
+shape = SubResource("RectangleShape2D_2c62f")
+
+[node name="TextureRect" type="TextureRect" parent="ground/CollisionShape2D"]
+offset_left = -624.0
+offset_top = -26.0
+offset_right = 625.0
+offset_bottom = 22.0
+texture = ExtResource("1_0f027")
+stretch_mode = 1
+
+[node name="crusher_1" type="CharacterBody2D" parent="." groups=["crusher"]]
+position = Vector2(-124, 0)
+script = ExtResource("2_671wp")
+speed = -300.0
+damage = 10
+health = null
+explosion = ExtResource("3_m35m6")
+
+[node name="Area2D" type="Area2D" parent="crusher_1" groups=["crusher"]]
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="crusher_1/Area2D"]
+shape = SubResource("CircleShape2D_qwutr")
+
+[node name="Frame0000" type="Sprite2D" parent="crusher_1" groups=["crusher"]]
+scale = Vector2(2.5, 2.5)
+texture = ExtResource("1_2c62f")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="crusher_1" groups=["crusher"]]
+shape = SubResource("CircleShape2D_qwutr")
+
+[node name="player" type="CharacterBody2D" parent="." groups=["player"]]
+position = Vector2(-498, 197)
+scale = Vector2(1.5, 1.5)
+script = ExtResource("3_d5x1h")
+bullet = ExtResource("4_qwutr")
+bullet_speed = 1000.0
+shoot_time = 0.25
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="player" groups=["player"]]
+position = Vector2(2, 11)
+shape = SubResource("CapsuleShape2D_8mm7a")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="player" groups=["player"]]
+root_node = NodePath("../CollisionShape2D")
+libraries = {
+&"": SubResource("AnimationLibrary_mo76n")
+}
+
+[node name="Sprite2D" type="Sprite2D" parent="player" groups=["player"]]
+position = Vector2(4, 6)
+scale = Vector2(2, 2)
+texture = ExtResource("7_wr18j")
+
+[node name="Area2D" type="Area2D" parent="player" groups=["player"]]
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="player/Area2D" groups=["player"]]
+position = Vector2(2, 11)
+shape = SubResource("CapsuleShape2D_8mm7a")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_gyfs4")
+
+[node name="borders" type="StaticBody2D" parent="."]
+disable_mode = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="borders"]
+position = Vector2(-476, -301)
+rotation = 3.14159
+shape = SubResource("WorldBoundaryShape2D_gyfs4")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="borders"]
+position = Vector2(-575, -141)
+rotation = 1.5708
+shape = SubResource("WorldBoundaryShape2D_gyfs4")
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="borders"]
+position = Vector2(574, -148)
+rotation = -1.5708
+shape = SubResource("WorldBoundaryShape2D_gyfs4")
+
+[node name="crosshair" type="Sprite2D" parent="."]
+top_level = true
+texture = ExtResource("9_wr18j")
+script = ExtResource("10_qwutr")
+
+[node name="ui_manager" type="Node2D" parent="."]
+script = ExtResource("13_mo76n")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="ui_manager"]
+
+[node name="crusher_1_health" type="TextureProgressBar" parent="ui_manager/CanvasLayer"]
+offset_left = 999.0
+offset_top = 26.0
+offset_right = 1129.0
+offset_bottom = 115.0
+value = 100.0
+stretch_margin_left = 16
+stretch_margin_top = 16
+texture_under = ExtResource("14_2jcla")
+texture_progress = ExtResource("15_m35m6")
+texture_progress_offset = Vector2(3, 1)
+
+[node name="crusher_icon" type="TextureRect" parent="ui_manager/CanvasLayer/crusher_1_health"]
+layout_mode = 0
+offset_left = 95.0
+offset_top = -9.0
+offset_right = 146.0
+offset_bottom = 42.0
+texture = ExtResource("1_2c62f")
+
+[node name="crusher_2_health" type="TextureProgressBar" parent="ui_manager/CanvasLayer"]
+offset_left = 999.0
+offset_top = 91.0
+offset_right = 1129.0
+offset_bottom = 180.0
+value = 100.0
+stretch_margin_left = 16
+stretch_margin_top = 16
+texture_under = ExtResource("14_2jcla")
+texture_progress = ExtResource("15_m35m6")
+texture_progress_offset = Vector2(3, 1)
+
+[node name="crusher_icon" type="TextureRect" parent="ui_manager/CanvasLayer/crusher_2_health"]
+layout_mode = 0
+offset_left = 95.0
+offset_top = -9.0
+offset_right = 146.0
+offset_bottom = 42.0
+texture = ExtResource("1_2c62f")
+
+[node name="player_health" type="TextureProgressBar" parent="ui_manager/CanvasLayer"]
+offset_left = 59.0
+offset_top = 26.0
+offset_right = 189.0
+offset_bottom = 115.0
+value = 100.0
+stretch_margin_left = 16
+stretch_margin_top = 16
+texture_under = ExtResource("14_2jcla")
+texture_progress = ExtResource("15_m35m6")
+texture_progress_offset = Vector2(3, 1)
+
+[node name="player_icon" type="TextureRect" parent="ui_manager/CanvasLayer/player_health"]
+layout_mode = 0
+offset_left = -51.0
+offset_top = -9.0
+offset_right = -11.0
+offset_bottom = 31.0
+texture = ExtResource("8_66tet")
+
+[node name="lose_ui" type="Button" parent="ui_manager/CanvasLayer"]
+visible = false
+offset_left = 573.0
+offset_top = 279.0
+offset_right = 655.0
+offset_bottom = 333.0
+text = "You Lose!
+Try Again"
+
+[node name="win_ui" type="Button" parent="ui_manager/CanvasLayer"]
+visible = false
+offset_left = 573.0
+offset_top = 279.0
+offset_right = 655.0
+offset_bottom = 333.0
+text = "You Win!
+Replay?"
+
+[node name="flawless_ui" type="Button" parent="ui_manager/CanvasLayer"]
+visible = false
+offset_left = 573.0
+offset_top = 279.0
+offset_right = 655.0
+offset_bottom = 333.0
+text = "Flawless Victory!
+Restart?"
+
+[node name="crusher_2" type="RigidBody2D" parent="." groups=["crusher"]]
+position = Vector2(143, 27)
+physics_material_override = SubResource("PhysicsMaterial_u0ygc")
+gravity_scale = 0.0
+can_sleep = false
+lock_rotation = true
+contact_monitor = true
+max_contacts_reported = 2
+script = ExtResource("17_u0ygc")
+speed = 100.0
+damage = 10
+explosion = ExtResource("3_m35m6")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="crusher_2" groups=["crusher"]]
+shape = SubResource("CircleShape2D_qwutr")
+
+[node name="Area2D" type="Area2D" parent="crusher_2" groups=["crusher"]]
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="crusher_2/Area2D" groups=["crusher"]]
+shape = SubResource("CircleShape2D_qwutr")
+
+[node name="Frame0000" type="Sprite2D" parent="crusher_2" groups=["crusher"]]
+scale = Vector2(2.5, 2.5)
+texture = ExtResource("1_2c62f")
+
+[connection signal="area_entered" from="crusher_1/Area2D" to="crusher_1" method="_on_area_2d_area_entered"]
+[connection signal="pressed" from="ui_manager/CanvasLayer/lose_ui" to="ui_manager" method="_on_lose_ui_pressed"]
+[connection signal="pressed" from="ui_manager/CanvasLayer/win_ui" to="ui_manager" method="_on_win_ui_pressed"]
+[connection signal="pressed" from="ui_manager/CanvasLayer/flawless_ui" to="ui_manager" method="_on_win_ui_pressed"]
+[connection signal="area_entered" from="crusher_2/Area2D" to="crusher_2" method="_on_area_2d_area_entered"]
